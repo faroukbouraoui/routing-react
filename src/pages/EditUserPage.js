@@ -1,10 +1,13 @@
 import React, { Component } from "react";
-import { getUser } from "../Api/Users";
+import { getUser, updateUser } from "../Api/Users";
 import UsersForm from "../Components/UsersForm";
 
 export default class EditUserPage extends Component {
   state = {
-    user: {},
+    user: {
+      name: '',
+      email: ''
+    },
   };
 
   componentDidMount = () => {
@@ -18,12 +21,21 @@ export default class EditUserPage extends Component {
       });
     console.log(userID);
   };
+  updateUser = (values)=>{
+    const id = this.state.user.id;
+    updateUser(id, values).then(()=>{
+      alert('Success');
+      this.props.history.push('/users')
+    }).catch(error=>{
+      alert('something happend in update');
+    });
+  }
 
   render() {
     return (
       <div>
         <h2>User</h2>
-        <UsersForm values={this.state.user} />
+        <UsersForm values={this.state.user} onSubmit={this.updateUser} />
       </div>
     );
   }
